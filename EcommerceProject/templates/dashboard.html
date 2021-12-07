@@ -1,0 +1,242 @@
+
+
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+<style>
+
+</style>
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="main section-conten padding-y bg">
+
+<div class="container">
+							  {% for message in messages%}
+		<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+		  <strong>{{message}}</strong>
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		{% endfor %}
+<div class="row">
+	<aside class="col-md-3" >
+		<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+      <a class="nav-link active" id="v-pills-dash-tab" data-toggle="pill" href="#v-pills-dash" role="tab" aria-controls="v-pills-home" aria-selected="true">Dashboard</a>
+      <a class="nav-link" id="v-pills-order-tab" data-toggle="pill" href="#v-pills-order" role="tab" aria-controls="v-pills-profile" aria-selected="false">My Orders</a>
+      <a class="nav-link" id="v-pills-edit-tab" data-toggle="pill" href="#v-pills-edit" role="tab" aria-controls="v-pills-messages" aria-selected="false">Edit Profile</a>
+      <a class="nav-link" id="v-pills-changepassword-tab" data-toggle="pill" href="#v-pills-changepassword" role="tab" aria-controls="v-pills-settings" aria-selected="false">Change Password</a>
+    </div>
+  <!--   SIDEBAR   -->
+
+  <br>
+  <a class="btn btn-light btn-block" href="/accounts/logout/"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a>
+  <!--   SIDEBAR .//END   -->
+</aside>
+<div class="col-9">
+	 <div class="tab-content" id="v-pills-tabContent">
+      <div class="tab-pane fade show active" id="v-pills-dash" role="tabpanel" aria-labelledby="v-pills-dash-tab">
+		  <main class="col-md-20">
+		<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Logged in as:</strong>
+			<span>{{user.full_name}}</span>
+		</header>
+		<div class="card-body">
+			<div class="row">
+
+			<div class="col-md-6">
+				<div class="card" style="text-align:center;">
+					<div class="card-body">
+						<h5 class="card-title">Total Orders</h5>
+						<h4>{{order_count}}</h4>
+						<a class="nav-link" id="v-pills-order-tab1" data-toggle="pill" href="#v-pills-order" role="tab" aria-controls="v-pills-profile" aria-selected="false">View Orders</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="card" style="text-align:center;">
+					<div class="card-body">
+						<img src="{%if user.image%}{{user.image.url}}{%else%}{%static 'images/default_profile.jpg'%}{%endif%}" alt="User Profile Picture" width="50" height="50" style="border-radius:50%;">
+						<p class="mb-0">{{user.email}}</p>
+						<p>{{user.phone}}</p>
+					</div>
+				</div>
+			</div>
+
+			</div> <!-- row.// -->
+		</div> <!-- card-body .// -->
+
+		</article> <!-- order-group.// -->
+	</main>
+
+
+	  </div>
+      <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab">
+
+
+		  <main class="col-md-20">
+		<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Your order history</strong>
+
+		</header>
+		<div class="card-body">
+			<div class="row">
+			<div class="col-md-12">
+				<table class="table table-hover">
+				  <thead>
+				    <tr>
+				      <th scope="col">Order #</th>
+				      <th scope="col">Billing Name</th>
+				      <th scope="col">Phone</th>
+				      <th scope="col">Order Total</th>
+							<th scope="col">Date</th>
+						<th scope="col">Track&Details</th>
+
+				    </tr>
+				  </thead>
+				  <tbody>
+					{% for order in orders%}
+					<tr>
+						<th scope="row"><a href="{{order.get_order_url}}">{{order.order_number}}</a></th>
+					<td>{{order.full_name}}</td>
+						<td>{{order.phone}}</td>
+						<td>{{order.order_total}}</td>
+						<td>{{order.created_at}}</td>
+						<td width="250"> <a href="{{order.get_track_url}}" class="btn btn-outline-primary">Track order</a> <a href="{{order.get_order_url}}" class="btn btn-light"> Details </a> </td>
+						</tr>
+				  {%endfor%}
+
+				  </tbody>
+				</table>
+			</div>
+
+			</div> <!-- row.// -->
+		</div> <!-- card-body .// -->
+
+		</article> <!-- order-group.// -->
+	</main>
+	  </div>
+      <div class="tab-pane fade" id="v-pills-edit" role="tabpanel" aria-labelledby="v-pills-edit-tab">
+		  <main class="col-md-9">
+		<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Edit your profile</strong>
+
+		</header>
+		<div class="card-body">
+			<div class="text-right">
+				<img src="{%if user.image%}{{user.image.url}}{%else%}{%static 'images/default_profile.jpg'%}{%endif%}" alt="Profile Picture" width="100" style="border-radius:50px;">
+			</div>
+			<div class="row">
+			<div class="col-md-12">
+				<form action="{%url 'onlineshop:edit_profile' %}" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label>First Name</label>
+							<input type="text" name="first_name" value="{{user.first_name}}" maxlength="50" class="form-control" required="" id="id_first_name">
+						</div>
+						<div class="form-group col-md-6">
+							<label>Last Name</label>
+							<input type="text" name="last_name" value="{{user.last_name}}" maxlength="50" class="form-control" required="" id="id_last_name">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label>Phone Number</label>
+							<input type="text" name="phone_number" value="{{user.phone}}" maxlength="50" class="form-control" required="" id="id_phone_number">
+						</div>
+						<div class="form-group col-md-6">
+							<label>Profile Picture</label>
+							<input type="file" name="profile_picture" accept="image/*" class="form-control" id="id_profile_picture">
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Address Line 1</label>
+						<input type="text" name="address_line_1" value="{{user.address_line_1}}" maxlength="100" class="form-control" id="id_address_line_1">
+					</div>
+					<div class="form-group">
+						<label>Address Line 2</label>
+						<input type="text" name="address_line_2" value="{{user.address_line_1}}" maxlength="100" class="form-control" id="id_address_line_2">
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label>City</label>
+							<input type="text" name="city" value="{{user.city}}" maxlength="20" class="form-control" id="id_city">
+						</div>
+						<div class="form-group col-md-4">
+							<label>State</label>
+							<input type="text" name="state" value="{{user.state}}" maxlength="20" class="form-control" id="id_state">
+						</div>
+						<div class="form-group col-md-4">
+							<label>Country</label>
+							<input type="text" name="country" value="{{user.country}}" maxlength="20" class="form-control" id="id_country">
+						</div>
+					</div>
+					<input type="submit" class="btn btn-primary">
+				</form>
+			</div>
+
+			</div> <!-- row.// -->
+		</div> <!-- card-body .// -->
+
+		</article> <!-- order-group.// -->
+	</main>
+	  </div>
+      <div class="tab-pane fade" id="v-pills-changepassword" role="tabpanel" aria-labelledby="v-pills-changepassword-tab">
+		  <main class="col-md-9">
+		<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Change Your Password</strong>
+
+		</header>
+		<div class="card-body">
+			<div class="row">
+			<div class="col-md-12">
+				<form action="{%url 'onlineshop:change_password'%}" method="POST">
+					{%csrf_token%}
+
+					<div class="form-group">
+						<label>Current Password</label>
+						<input type="password" name="current_password" placeholder="Current Password" class="form-control" required="">
+					</div>
+					<div class="form-group">
+						<label>Create new password</label>
+						<input type="password" name="new_password" placeholder="Create New Password" class="form-control" required="">
+					</div>
+					<div class="form-group">
+						<label>Confirm new password</label>
+						<input type="password" name="confirm_password" placeholder="Confirm New Password" class="form-control" required="">
+					</div>
+
+					<input type="submit" class="btn btn-primary">
+				</form>
+			</div>
+
+			</div> <!-- row.// -->
+		</div> <!-- card-body .// -->
+
+		</article> <!-- order-group.// -->
+	</main>
+	  </div>
+    </div>
+
+
+
+
+</div>
+</div>
+</div>
+
+</br>
+	</br>
+	</br>
+</section>
+
+<script>
+
+
+</script>
+{% endblock %}

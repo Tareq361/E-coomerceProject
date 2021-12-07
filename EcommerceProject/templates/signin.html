@@ -1,0 +1,51 @@
+<!-- section-header.// -->
+
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y" style="min-height:84vh">
+
+<!-- ============================ COMPONENT LOGIN   ================================= -->
+	<div class="card mx-auto" style="max-width: 380px; margin-top:100px;">
+      <div class="card-body">
+      <h4 class="card-title mb-4">Sign in</h4>
+          						  {% for message in messages%}
+		<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+		  <strong>{{message}}</strong>
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		{% endfor %}
+      <form action="{%url 'onlineshop:signIn'%}" method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+			 <input type="email" class="form-control" name="Email" placeholder="Email Address"  required>
+          </div> <!-- form-group// -->
+          <div class="form-group">
+			<input type="password" class="form-control" name="Password" minlength="8" placeholder="Password" required>
+          </div> <!-- form-group// -->
+          
+          <div class="form-group">
+          	<a href="{%url 'onlineshop:forgotpassword'%}" class="float-right">Forgot password?</a>
+           
+          </div> <!-- form-group form-check .// -->
+          <div class="form-group">
+              <button type="submit" class="btn btn-primary btn-block"> Login  </button>
+          </div> <!-- form-group// -->    
+      </form>
+      </div> <!-- card-body.// -->
+    </div> <!-- card .// -->
+
+     <p class="text-center mt-4">Don't have account? <a href="{%url 'onlineshop:register'%}">Sign up</a></p>
+     <br><br>
+<!-- ============================ COMPONENT LOGIN  END.// ================================= -->
+
+
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}
+
