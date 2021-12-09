@@ -17,7 +17,7 @@ from Ecommerce import settings
 from .models import product_gallery,Category, Product, Cart, Cartitem, Variation, Customer, Order, Payment, OrderProduct, ReviewRating
 from django.contrib import messages
 #for payment system
-from sslcommerz_python.payment import SSLCSession
+# from sslcommerz_python.payment import SSLCSession
 from decimal import Decimal
 
 # Create your views here.
@@ -520,33 +520,34 @@ def payment(request,order_id):
     if request.session.get('customer'):
         order=Order.objects.get(order_number=order_id)
 
-        mypayment = SSLCSession(sslc_is_sandbox=True, sslc_store_id=settings.STORE_ID,
-                                sslc_store_pass=settings.STORE_PASS)
-        current_site = str(get_current_site(request))
-        status_url="http://"+current_site+"/order_complete/?order_no="+str(order_id)+"&cid="+str(request.session.get('customer'))
-        mypayment.set_urls(success_url=status_url, fail_url=status_url,
-                           cancel_url=status_url, ipn_url=status_url)
+#         mypayment = SSLCSession(sslc_is_sandbox=True, sslc_store_id=settings.STORE_ID,
+#                                 sslc_store_pass=settings.STORE_PASS)
+#         current_site = str(get_current_site(request))
+#         status_url="http://"+current_site+"/order_complete/?order_no="+str(order_id)+"&cid="+str(request.session.get('customer'))
+#         mypayment.set_urls(success_url=status_url, fail_url=status_url,
+#                            cancel_url=status_url, ipn_url=status_url)
 
-        mypayment.set_product_integration(total_amount=Decimal(order.order_total), currency='BDT', product_category='clothing',
-                                          product_name='demo-product', num_of_item=2, shipping_method='YES',
-                                          product_profile='None')
+#         mypayment.set_product_integration(total_amount=Decimal(order.order_total), currency='BDT', product_category='clothing',
+#                                           product_name='demo-product', num_of_item=2, shipping_method='YES',
+#                                           product_profile='None')
 
-        mypayment.set_customer_info(name=order.first_name, email=order.email, address1=order.address_line_1,
-                                    address2=order.address_line_2, city=order.city, postcode='1207', country='Bangladesh',
-                                    phone=order.phone)
+#         mypayment.set_customer_info(name=order.first_name, email=order.email, address1=order.address_line_1,
+#                                     address2=order.address_line_2, city=order.city, postcode='1207', country='Bangladesh',
+#                                     phone=order.phone)
 
-        mypayment.set_shipping_info(shipping_to=order.first_name, address=order.address_line_1, city=order.city, postcode='1209',
-                                    country='Bangladesh')
+#         mypayment.set_shipping_info(shipping_to=order.first_name, address=order.address_line_1, city=order.city, postcode='1209',
+#                                     country='Bangladesh')
 
-        # If you want to post some additional values
-        # mypayment.set_additional_values(value_a='cusotmer@email.com', value_b='portalcustomerid', value_c='1234',
-        #                                 value_d='uuid')
+#         # If you want to post some additional values
+#         # mypayment.set_additional_values(value_a='cusotmer@email.com', value_b='portalcustomerid', value_c='1234',
+#         #                                 value_d='uuid')
 
-        response_data = mypayment.init_payment()
-        print("--------------------------------")
-        print(response_data)
-        print("--------------------------------")
-        return redirect(response_data['GatewayPageURL'])
+#         response_data = mypayment.init_payment()
+#         print("--------------------------------")
+#         print(response_data)
+#         print("--------------------------------")
+#         return redirect(response_data['GatewayPageURL'])
+          return redirect('order_complete/')
     else:
         return redirect('/')
 @csrf_exempt
