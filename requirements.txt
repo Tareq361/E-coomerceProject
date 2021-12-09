@@ -15,8 +15,8 @@ pytz==2021.3
 requests==2.26.0
 six==1.13.0
 sqlparse==0.4.2
-sslcommerz-python==0.0.7
+sslcommerz-python
 urllib3==1.25.7
 whitenoise==5.3.0
 wrapt==1.11.2
-requests==2.22.0
+
