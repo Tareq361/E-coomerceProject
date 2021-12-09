@@ -19,3 +19,4 @@ sslcommerz-python==0.0.7
 urllib3==1.25.7
 whitenoise==5.3.0
 wrapt==1.11.2
+requests==2.22.0
