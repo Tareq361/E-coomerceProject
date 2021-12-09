@@ -14,7 +14,7 @@ from django.core.mail import EmailMessage, send_mail
 from django.views.decorators.csrf import csrf_exempt
 
 from Ecommerce import settings
-from .models import Category, Product, Cart, Cartitem, Variation, Customer, Order, Payment, OrderProduct, ReviewRating
+from .models import product_gallery,Category, Product, Cart, Cartitem, Variation, Customer, Order, Payment, OrderProduct, ReviewRating
 from django.contrib import messages
 #for payment system
 from sslcommerz_python.payment import SSLCSession
@@ -153,7 +153,7 @@ def productView(request,pname):
     category=Category.objects.all()
     product=Product.objects.get(productName=pname)
     in_cart=Cartitem.objects.filter(cart__cart_id=_cart_id(request),product=product)
-
+    product_galleries=product_gallery.objects.filter(product=product)
     if request.session.get('customer'):
         try:
             orderproduct = OrderProduct.objects.filter(user=request.session.get('customer'), product_id=product.id).exists()
@@ -164,7 +164,7 @@ def productView(request,pname):
 
     # Get the reviews
     reviews = ReviewRating.objects.filter(product_id=product.id, status=True)
-    return render(request,"productDetails.html",{"category":category,"product":product,"in_cart":in_cart,"cart_count":_cart_count(request),"reviews":reviews,"orderproduct":orderproduct})
+    return render(request,"productDetails.html",{"category":category,"product":product,"in_cart":in_cart,"cart_count":_cart_count(request),"reviews":reviews,"orderproduct":orderproduct,"product_galleries":product_galleries})
 def storeView(request):
 
     category=Category.objects.all()
@@ -212,10 +212,10 @@ def _cart_id(request):
     else:
         cart=request.session.session_key
         print("without sign in cart")
-        print("has key "+cart)
+
         if not cart:
             cart=request.session.create()
-            print("new key "+cart)
+
     return cart
 def _cart_count(request, cart_count=0):
     if request.session.get('customer'):

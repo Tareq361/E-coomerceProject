@@ -54,7 +54,11 @@ class Product(models.Model):
         if reviews['average'] is not None:
             avg = float(reviews['average'])
         return avg
-
+class product_gallery(models.Model):
+    product=models.ForeignKey(Product,on_delete=models.CASCADE,default=None)
+    image=models.ImageField(upload_to='products_image/product_gallery/')
+    def __str__(self):
+        return self.prouct.productName
     def countReview(self):
         reviews = ReviewRating.objects.filter(product=self, status=True).aggregate(count=Count('id'))
         count = 0
