@@ -12,8 +12,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-import whitenoise.middleware
 
+import pymysql
+pymysql.install_as_MySQLdb()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -40,11 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'onlineshop',
     'admin_honeypot',
+'django_extensions',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django_session_timeout.middleware.SessionTimeoutMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,7 +56,7 @@ MIDDLEWARE = [
 ]
 SESSION_EXPIRE_SECONDS = 3600  # 1 hour
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
-SESSION_TIMEOUT_REDIRECT = 'signin/'
+SESSION_TIMEOUT_REDIRECT = '/'
 ROOT_URLCONF = 'Ecommerce.urls'
 
 TEMPLATES = [
@@ -82,8 +83,17 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+                'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'multiB',
+        'USER': 'root',
+        'PASSWORD': 'Tareq@642',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'TIME_ZONE':'Asia/Dacca',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
+
     }
 }
 
@@ -112,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dacca'
 
 USE_I18N = True
 
@@ -132,15 +142,25 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 #for email send
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_USER = "mtareq361@gmail.com"
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST_USER = "mtareq361@gmail.com"
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_PASSWORD = "zrpjewtbrbspydch"
+#for email send
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST_USER = "shohojbid@gmail.com"
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_PASSWORD = "zrpjewtbrbspydch"
+EMAIL_HOST_PASSWORD = "kbzpelnphbnfwhcn"
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 #for payment system
 STORE_ID="multi61acd2da35d20"
 STORE_PASS="multi61acd2da35d20@ssl"
+PAYPAL_CLIENT_ID="AUWJYkFg4dPx9my8Ih6IyW9CXcC6RrnN7viFRhpS4djCn1FrOdFRNHIhTJ4PskBAaQldRbRf4wWPO-OS"
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

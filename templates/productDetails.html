@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{%block title%}{{product.productName}} || Multi Billionaire{%endblock title%}
 {% block body %}
 {% load static %}
 
@@ -41,7 +42,7 @@
 			</span>
 	</div>
 <div class="mb-3">
-	<var class="price h4">${{product.price}}</var>
+	<var class="price h4">&#2547;{{product.price}}</var>
 </div>
 
 <p>{{product.description}}</p>
@@ -202,7 +203,7 @@ var recognition = new SpeechRecognition();
 	recognition.onresult=function(event){
 	console.log(event);
 
-	if(event.results[0][0].transcript=="add to cart"){
+	if(event.results[0][0].transcript){
 	console.log(event.results[0][0].transcript+" successfull");
 	var a = document.getElementById("size").value;
     var b = document.getElementById("color").value;

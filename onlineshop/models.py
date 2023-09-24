@@ -11,8 +11,8 @@ class Customer(models.Model):
     phone=models.CharField(max_length=20)
     image=models.ImageField(blank=True, upload_to="customer_profilePic/")
     password = models.CharField(max_length=200)
-    date_join=models.DateTimeField(default=timezone.now())
-    last_login=models.DateTimeField(default=timezone.now())
+    date_join=models.DateTimeField(default=timezone.now)
+    last_login=models.DateTimeField(null=True)
     is_active=models.BooleanField(default=False)
     address_line_1 = models.CharField(max_length=50,blank=True)
     address_line_2 = models.CharField(max_length=50, blank=True)
@@ -20,7 +20,7 @@ class Customer(models.Model):
     state = models.CharField(max_length=50,blank=True)
     city = models.CharField(max_length=50,blank=True)
     def __str__(self):
-        return self.first_name
+        return self.email
     def full_name(self):
         return self.first_name+" "+self.last_name
     def get_email_field_name(self):
@@ -47,24 +47,25 @@ class Product(models.Model):
     def __str__(self):
         return self.productName
     def get_absolute_url(self):      #for individul class view with dynamic link
-        return reverse("onlineshop:productview",args=[self.productName])
+        return reverse("onlineshop:productview",args=[self.id])
     def averageReview(self):
         reviews = ReviewRating.objects.filter(product=self, status=True).aggregate(average=Avg('rating'))
         avg = 0
         if reviews['average'] is not None:
             avg = float(reviews['average'])
         return avg
-class product_gallery(models.Model):
-    product=models.ForeignKey(Product,on_delete=models.CASCADE,default=None)
-    image=models.ImageField(upload_to='products_image/product_gallery/')
-    def __str__(self):
-        return self.prouct.productName
     def countReview(self):
         reviews = ReviewRating.objects.filter(product=self, status=True).aggregate(count=Count('id'))
         count = 0
         if reviews['count'] is not None:
             count = int(reviews['count'])
         return count
+class product_gallery(models.Model):
+    product=models.ForeignKey(Product,on_delete=models.CASCADE,default=None)
+    image=models.ImageField(upload_to='products_image/product_gallery/')
+    def __str__(self):
+        return self.product.productName
+
 variation_category_choice=(
                               ('color','color'),
                               ('size','size'),
@@ -79,7 +80,7 @@ class Variation(models.Model):
         return self.variation_value
 class Cart(models.Model):
     cart_id=models.CharField(max_length=250,blank=True)
-    date_added=models.DateField(default=timezone.now())
+    date_added=models.DateField(default=timezone.now)
 
     def __str__(self):
         return self.cart_id
@@ -101,7 +102,7 @@ class Payment(models.Model):
     payment_method = models.CharField(max_length=100)
     amount_paid = models.CharField(max_length=100) # this is the total amount paid
     status = models.CharField(max_length=100)
-    created_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.payment_id
@@ -135,8 +136,8 @@ class Order(models.Model):
     status = models.CharField(max_length=20, choices=STATUS, default='New')
     ip = models.CharField(blank=True, max_length=20)
     is_ordered = models.BooleanField(default=False)
-    created_at = models.DateTimeField(default=timezone.now(),null=True)
-    updated_at = models.DateTimeField(default=timezone.now(),null=True)
+    created_at = models.DateTimeField(default=timezone.now,null=True)
+    updated_at = models.DateTimeField(default=timezone.now,null=True)
     delivery_time=models.DateTimeField(default=timezone.now()+timezone.timedelta(days=7))
 
     def full_name(self):
@@ -162,7 +163,7 @@ class OrderProduct(models.Model):
     quantity = models.IntegerField()
     product_price = models.FloatField()
     ordered = models.BooleanField(default=False)
-    created_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -175,5 +176,5 @@ class ReviewRating(models.Model):
     rating = models.FloatField()
     ip = models.CharField(max_length=20, blank=True)
     status = models.BooleanField(default=True)
-    created_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)

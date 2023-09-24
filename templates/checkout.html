@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{%block title%}Checkout Page || Multi Billionaire{%endblock title%}
 {% block body %}
 
 
@@ -108,8 +108,8 @@
       	</td>
       	<td>
       		<div class="price-wrap">
-      			<var class="price">$ {{ cart_item.total }}</var>
-      			<small class="text-muted"> $ {{ cart_item.product.price }} each </small>
+      			<var class="price">&#2547; {{ cart_item.total }}</var>
+      			<small class="text-muted">&#2547; {{ cart_item.product.price }} each </small>
       		</div> <!-- price-wrap .// -->
       	</td>
 

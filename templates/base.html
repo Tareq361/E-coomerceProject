@@ -1,5 +1,6 @@
 
 
+
 {% load static %}
 <!DOCTYPE HTML>
 <html lang="en">
@@ -9,7 +10,7 @@
 <meta http-equiv="cache-control" content="max-age=604800" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<title>Multi Billionaire | A trustworthy E-commerce site</title>
+<title>{%block title%}{%endblock title%}</title>
 
 <link href="{% static 'images/favicon.ico' %}" rel="shortcut icon" type="image/x-icon">
 
@@ -47,6 +48,7 @@ $(document).ready(function() {
 
 
 <header class="section-header" id="nav">
+
 <nav class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom">
 <div class="container">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,37 +61,46 @@ $(document).ready(function() {
 
 		</li>
 		<li class="nav-item dropdown">
-			<a href="#" class="nav-link"> USD </a>
+			<a href="#" class="nav-link"> BDT </a>
 		</li>
     </ul>
     <ul class="navbar-nav">
-		<li><a href="#" class="nav-link"> <i class="fa fa-envelope"></i> Email </a></li>
+		<li><a href="#" class="nav-link"> <i class="fa fa-envelope"></i> bdmultibillionaire@gmail.com </a></li>
 		<li><a href="#" class="nav-link"> <i class="fa fa-phone"></i> Call us </a></li>
 	</ul> <!-- list-inline //  -->
   </div> <!-- navbar-collapse .// -->
 </div> <!-- container //  -->
 </nav>
-
-<section class="header-main border-bottom">
+<section class="header-main border-bottom" style="border-color:red">
 	<div class="container">
 <div class="row align-items-center">
-	<div class="col-lg-2 col-md-3 col-6" >
+	<div class="col-lg-3 col-md-3 col-6" >
 		<a href="{%url 'onlineshop:home'%}" class="brand-wrap" >
 			<img class="logo" src="{% static 'images/logo_multi.png' %}">
 		</a> <!-- brand-wrap.// -->
 	</div>
+	<div class="col-lg col-sm col-md col-6 flex-grow-0">
+		<div class="category-wrap dropdown d-inline-block float-right">
+			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+				<i class="fa fa-bars"></i> All category
+			</button>
+			<div class="dropdown-menu">
+				{% for cate in category%}
+				<a class="dropdown-item" href="{{cate.get_absolute_category_url}}">{{cate.category_name}}</a>
+				{% endfor %}
+			</div>
+		</div>  <!-- category-wrap.// -->
+	</div> <!-- col.// -->
+	<a href="{% url 'onlineshop:storeview' %}" class="btn btn-outline-primary">Store</a>
 
 
-	<div class="col-lg  col-md-6 col-sm-12 col" style="margin-left:100px">
+	<div class="col-lg-4  col-md-6 col-sm-12 col" style="">
 		<form name="myForm" id="myForm" action="{% url 'onlineshop:searchView' %}" class="search" METHOD="POST">
 			{% csrf_token %}
 			<div class="input-group w-100">
-				<select class="custom-select" name="category_name">
-								<option value="">All type</option><option value="codex">Special</option>
-								<option value="comments">Only best</option>
-								<option value="content">Latest</option>
-						</select>
-			    <input type="text" class="form-control" id="search" name="keyword" style="width:60%;" placeholder="Search">
+
+
+			    <input type="text" class="form-control" id="search" name="keyword" style="width60%;" placeholder="Search">
 
 			    <div class="input-group-append">
 			      <button class="btn btn-primary" type="submit">
@@ -109,7 +120,7 @@ $(document).ready(function() {
 			      </button>
 	</div>
 	<!-- col.// -->
-	<div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
+	<div class="col-lg-2 col-sm-6 col-8 order-2 order-lg-3">
 				<div class="d-flex justify-content-end mb-3 mb-lg-0">
 					{%if request.session.customer %}
 										<div class="widget-header">
@@ -135,34 +146,15 @@ $(document).ready(function() {
 				</div> <!-- widgets-wrap.// -->
 			</div> <!-- col.// -->
 </div> <!-- row.// -->
+
 	</div> <!-- container.// -->
 
 </section> <!-- header-main .// -->
 
 
 
-
 </header> <!-- section-header.// -->
-<nav class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom">
-  <div class="container">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav3" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="main_nav3">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link pl-0" href="{%url 'onlineshop:storeview'%}"> <strong>All category</strong></a>
-        </li>
-		  {% for category in category%}
-        <li class="nav-item">
-          <a class="nav-link" href="{{category.get_absolute_category_url}}">{{category.category_name}}</a>
-        </li>
-       {%endfor%}
 
-      </ul>
-    </div> <!-- collapse .// -->
-  </div> <!-- container .// -->
-</nav>
 {% block body %}
    {% endblock %}
 <!-- ========================= SECTION MAIN ========================= -->
@@ -173,27 +165,70 @@ $(document).ready(function() {
 
 
 <!-- ========================= FOOTER ========================= -->
+
 <footer class="section-footer border-top">
 	<div class="container">
-		<div align="center">
-					<a target="_blank" href="https://www.sslcommerz.com/" title="SSLCommerz" alt="SSLCommerz"><img style="width:1000px;height:auto;" src="https://securepay.sslcommerz.com/public/image/SSLCommerz-Pay-With-logo-All-Size-01.png" /></a>
-			<br>
-			</div>
-		<section class="footer-bottom border-top row">
+		<section class="footer-top padding-y">
+			<div class="row">
+				<aside class="col-md-4">
+					<article class="mr-3">
+						<img src="{% static 'images/logo_multi.png' %}" class="logo-footer">
+						<p class="mt-3">Multi Billionaire. A trustworthy E-commerce site</p>
+						<div>
+						    <a  title="Facebook" target="_blank" href="#"><i class="fab fa-facebook-f"></i></a>
+						    <a  title="Instagram" target="_blank" href="#"><i class="fab fa-instagram"></i></a>
+						    <a  title="Youtube" target="_blank" href="#"><i class="fab fa-youtube"></i></a>
+						    <a  title="Twitter" target="_blank" href="#"><i class="fab fa-twitter"></i></a>
+						</div>
+					</article>
+				</aside>
+				<aside class="col-sm-3 col-md-2">
+					<h6 class="title">About</h6>
+					<ul class="list-unstyled">
+						<li> <a href="{%url 'onlineshop:aboutus'%}">About us</a></li>
+			     		<li> <a href="{%url 'onlineshop:rulesandterms'%}">Rules and terms</a></li>
+						<li> <a href="{%url 'onlineshop:blogs'%}">Blogs</a></li>
+					</ul>
+				</aside>
+				<aside class="col-sm-3 col-md-2">
+					<h6 class="title">Services</h6>
+					<ul class="list-unstyled">
+						<li> <a href="#">Help center</a></li>
+						<li> <a href="#">Money refund</a></li>
+						<li> <a href="#">Open dispute</a></li>
+					</ul>
+				</aside>
+				<aside class="col-sm-3  col-md-2">
+					<h6 class="title">For users</h6>
+					<ul class="list-unstyled">
+						<li> <a href="#"> User Login </a></li>
+						<li> <a href="#"> User register </a></li>
+						<li> <a href="#"> Account Setting </a></li>
+						<li> <a href="#"> My Orders </a></li>
+						<li> <a href="#"> My Wishlist </a></li>
+					</ul>
+				</aside>
+				<aside class="col-sm-2  col-md-2">
+					<h6 class="title">Payment Method</h6>
+									<a target="_blank" href="https://www.sslcommerz.com/" title="SSLCommerz" alt="SSLCommerz"><img style="width:150px;height:auto;" src="https://securepay.sslcommerz.com/public/image/sslcommerz.png" /></a>
+									<a target="_blank" href="https://www.paypal.com/" title="PAYPAL" alt="Paypal"><img style="width:150px;height:auto;" src="{% static 'images/misc/payment-paypal.png' %}"/></a>
+				</aside>
+			</div> <!-- row.// -->
+		</section>	<!-- footer-top.// -->
 
-			<div class="col-md-2">
-				<p class="text-muted"> &copy 2021 Multi Billionaire </p>
-			</div>
-			<div class="col-md-8 text-md-center">
-				<span  class="px-2">info@MultiBillionaire.io</span>
-				<span  class="px-2">+879-332-9375</span>
-				<span  class="px-2">Street name 123, Avanue abc</span>
-			</div>
+		<section class="footer-copyright border-top">
+				<p target="_blank" class="float-right text-muted">
+					<a href="#">Privacy &amp; Cookies</a> &nbsp;   &nbsp;
+					<a href="#">Accessibility</a>
+				</p>
+				<p class="text-muted"> © 2021 Multi Billionaire  All rights reserved </p>
 
 		</section>
 	</div><!-- //container -->
 </footer>
+
 <!-- ========================= FOOTER END // ========================= -->
+
 <script>
 	function voiceSearch(){
 	var recognition = new webkitSpeechRecognition();
@@ -207,5 +242,7 @@ $(document).ready(function() {
 	}
 
 </script>
+{% block paypal %}
+{% endblock paypal %}
 </body>
 </html>

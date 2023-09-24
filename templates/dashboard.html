@@ -1,6 +1,7 @@
 
 
 {% extends 'base.html' %}
+{%block title%}My Dashboard || Multi Billionaire{%endblock title%}
 {% block body %}
 {% load static %}
 <style>
@@ -30,7 +31,7 @@
   <!--   SIDEBAR   -->
 
   <br>
-  <a class="btn btn-light btn-block" href="/accounts/logout/"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a>
+  <a class="btn btn-light btn-block" href="{%url 'onlineshop:logout'%}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a>
   <!--   SIDEBAR .//END   -->
 </aside>
 <div class="col-9">
@@ -50,8 +51,10 @@
 					<div class="card-body">
 						<h5 class="card-title">Total Orders</h5>
 						<h4>{{order_count}}</h4>
-						<a class="nav-link" id="v-pills-order-tab1" data-toggle="pill" href="#v-pills-order" role="tab" aria-controls="v-pills-profile" aria-selected="false">View Orders</a>
-					</div>
+
+						<a href="{%url 'onlineshop:myorder'%}" >View Orders</a>
+
+						</div>
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -72,7 +75,7 @@
 
 
 	  </div>
-      <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab">
+      <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab v-pills-order-tab1">
 
 
 		  <main class="col-md-20">

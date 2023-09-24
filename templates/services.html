@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{%block title%}Services || Multi Billionaire{%endblock title%}
+{% block body %}
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Services</title>
+<style>
+	ul {
+	  list-style-type: none;
+	  margin: 0;
+	  padding: 0;
+	  overflow: hidden;
+	  background-color: #91a39e;
+	}
+	li a
+	{
+	  display: block;
+	  color: white;
+	  text-align: center;
+	  padding: 14px 16px;
+	  text-decoration: none;
+	}
+	li a:hover
+	{
+	  background-color: #d0f030;
+	}
+</style>
+</head>
+
+<body>
+<ul>
+  <li><a href="{%url 'onlineshop:services'%}">Services Description</a></li>
+</ul>
+<br><br>
+
+<table>
+  <tr>
+    <td>Welcome to Multi-billionaire (A trustworthy E-commerce site). </td>
+
+  </tr>
+  <tr>
+    <td>Your most reliable source for the most updated product around the world with the cheapest price possible.</td>
+    <td>We are committed to serving you the best quality product.</td>
+  </tr>
+</table>
+
+
+ </body>
+</html>
+
+
+
+
+{% endblock %}

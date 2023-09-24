@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{%block title%}Order Review || Multi Billionaire{%endblock title%}
 {% load static %}
 
 {% block body %}
@@ -66,8 +67,8 @@
 									</td>
 									<td>
 										<div class="price-wrap">
-											<var class="price">$ {{ cart_item.total }}</var>
-											<small class="text-muted"> $ {{ cart_item.product.price }} each </small>
+											<var class="price">&#2547; {{ cart_item.total }}</var>
+											<small class="text-muted">&#2547; {{ cart_item.product.price }} each </small>
 										</div> <!-- price-wrap .// -->
 									</td>
 
@@ -84,33 +85,43 @@
 			<aside class="col-lg-4">
 
 				<div class="card">
+					<form action="{%url 'onlineshop:payment' order.order_number%} " METHOD="POST">
+						{% csrf_token%}
 					<div class="card-body">
 						<dl class="dlist-align">
 							<dt>Total price:</dt>
-							<dd class="text-right">$ {{total}}</dd>
+							<dd class="text-right">&#2547; {{total}}</dd>
 						</dl>
 						<dl class="dlist-align">
 							<dt>Tax:</dt>
-							<dd class="text-right"> $ {{tax}}</dd>
+							<dd class="text-right">&#2547; {{tax}}</dd>
 						</dl>
 						<dl class="dlist-align">
 							<dt>Grand Total:</dt>
-							<dd class="text-right text-dark b"><strong>$ {{grand_total}}</strong></dd>
+							<dd class="text-right text-dark b"><strong>&#2547; {{grand_total}}</strong></dd>
 						</dl>
 						<hr>
 												<dl class="dlist-align">
 							<dt>Payment Method</dt>
-							<dd class="text-right text-dark b"><select class="form-select" aria-label="Default select example">
+							<dd class="text-right text-dark b"><select id="pmethod" class="form-select" name="paymentMethod" aria-label="Default select example" onChange="update()">
 					  <option value="ssl" selected>SSLCOMMERZ</option>
-					  <option value="cod">Cash On Deliver</option>
+								<option value="paypal">Paypal</option>
+								<option value="cod">Cash on delivery</option>
 
 					</select></dd>
 						</dl>
-						</br>
-						<a href="{%url 'onlineshop:payment' order.order_number%} " class="btn btn-primary btn-block"> Pay </a>
 
+						</br>
+						<div id="sslp" style="display:block">
+						<button type="submit" class="btn btn-primary btn-block" > Pay With SSLCOMMERZ</button>
+						</div>
+						<div id="cod" style="display:none">
+						<button type="submit" class="btn btn-primary btn-block" > Continue</button>
+						</div>
+							<div id="paypal-button-container" style="display:none"></div>
 
 					</div> <!-- card-body.// -->
+					</form>
 				</div> <!-- card.// -->
 
 			</aside> <!-- col.// -->
@@ -124,8 +135,114 @@
 </section>
 <!-- ========================= SECTION CONTENT END// ========================= -->
 
-<script>
-
-</script>
 
 {% endblock %}
+{% block paypal %}
+  <script
+    src="https://www.paypal.com/sdk/js?client-id={{paypal_client_id}}">
+  </script>
+  <script>
+    	function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var total2 = parseInt("{{ grand_total }}");
+	total2=total2/84;
+    var amount=""+total2.toFixed(2);
+    console.log(amount)
+	var url = "{% url 'onlineshop:Paypalpayment' %}"
+	var csrftoken = getCookie('csrftoken');
+	var orderID = "{{order.order_number}}"
+	var payment_method = 'PayPal'
+	var redirect_url = "{% url 'onlineshop:order_complete' %}"
+	// Render the PayPal button into #paypal-button-container
+	paypal.Buttons({
+
+		style: {
+			color: 'blue',
+			shape: 'rect',
+			label: 'pay',
+			height: 40
+		},
+
+		// Set up the transaction
+		createOrder: function(data, actions) {
+			return actions.order.create({
+				purchase_units: [{
+					amount: {
+						value: amount,
+					}
+				}]
+			});
+		},
+
+		// Finalize the transaction
+		onApprove: function(data, actions) {
+			return actions.order.capture().then(function(details) {
+				// Show a success message to the buyer
+				console.log(details);
+				sendData();
+				function sendData(){
+					fetch(url, {
+						method : "POST",
+						headers: {
+							"Content-type": "application/json",
+							"X-CSRFToken": csrftoken,
+						},
+						body: JSON.stringify({
+							orderID: orderID,
+							transID: details.id,
+							payment_method: payment_method,
+							status: details.status,
+						}),
+					})
+				  .then((response) => response.json())
+				  .then((data) => {
+						window.location.href = redirect_url + '?order_number='+data.order_number+'&payment_id='+data.transID;
+					});
+				}
+			});
+		}
+
+
+	}).render('#paypal-button-container');
+function update() {
+var pmeth=document.getElementById('pmethod');
+var value = pmeth.options[pmeth.selectedIndex].value;
+console.log(value)
+if (value == "paypal"){
+document.getElementById('sslp').style.display="none";
+document.getElementById('cod').style.display="none";
+paypal1=document.getElementById('paypal-button-container');
+paypal1.style.display="block";
+
+}
+else if(value == "cod"){
+paypal1=document.getElementById('paypal-button-container');
+paypal1.style.display="none";
+document.getElementById('sslp').style.display="none";
+document.getElementById('cod').style.display="block";
+}
+else{
+paypal1=document.getElementById('paypal-button-container');
+paypal1.style.display="none";
+document.getElementById('cod').style.display="none";
+document.getElementById('sslp').style.display="block";
+}
+
+}
+
+
+  </script>
+{% endblock paypal %}

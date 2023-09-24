@@ -3,7 +3,8 @@
 import os
 import sys
 
-
+import pymysql
+pymysql.install_as_MySQLdb()
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Ecommerce.settings')

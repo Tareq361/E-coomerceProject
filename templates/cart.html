@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{%block title%}Cart Page || Multi Billionaire{%endblock title%}
 {% block body %}
 {% load static %}
 
@@ -59,8 +60,8 @@
 	</td>
 	<td> 
 		<div class="price-wrap"> 
-			<var class="price">${{cart_item.total}}</var>
-			<small class="text-muted"> ${{cart_item.product.price}} each </small>
+			<var class="price"><big style="font-size:16px">&#2547;</big>{{cart_item.total}}</var>
+			<small class="text-muted"> <big style="font-size:16px">&#2547;</big>{{cart_item.product.price}} each </small>
 		</div> <!-- price-wrap .// -->
 	</td>
 	<td class="text-right"> 
@@ -80,20 +81,18 @@
 		<div class="card-body">
 			<dl class="dlist-align">
 			  <dt>Total price:</dt>
-			  <dd class="text-right">${{total}}</dd>
+			  <dd class="text-right">&#2547;{{total}}</dd>
 			</dl>
 			<dl class="dlist-align">
 			  <dt>Tax:</dt>
-			  <dd class="text-right"> ${{tax}}</dd>
+			  <dd class="text-right">&#2547;{{tax}}</dd>
 			</dl>
 			<dl class="dlist-align">
 			  <dt>Grand Total:</dt>
-			  <dd class="text-right text-dark b"><strong>${{grand_total}}</strong></dd>
+			  <dd class="text-right text-dark b"><strong>&#2547;{{grand_total}}</strong></dd>
 			</dl>
 			<hr>
-			<p class="text-center mb-3">
-				<a target="_blank" href="https://www.sslcommerz.com/" title="SSLCommerz" alt="SSLCommerz"><img style="width:150px;height:auto;" src="https://securepay.sslcommerz.com/public/image/sslcommerz.png" /></a>
-			</p>
+
 			<a href="{%url 'onlineshop:checkout'%}" class="btn btn-primary btn-block"> Checkout </a>
 			<a href="{%url 'onlineshop:storeview'%}" class="btn btn-light btn-block">Continue Shopping</a>
 		</div> <!-- card-body.// -->

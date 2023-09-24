@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{%block title%}About us || Multi Billionaire{%endblock title%}
+{% block body %}
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>About Us</title>
+<style>
+	ul {
+	  list-style-type: none;
+	  margin: 0;
+	  padding: 0;
+	  overflow: hidden;
+	  background-color: #91a39e;
+	}
+	li a
+	{
+	  display: block;
+	  color: white;
+	  text-align: center;
+	  padding: 14px 16px;
+	  text-decoration: none;
+	}
+	li a:hover
+	{
+	  background-color: #d0f030;
+	}
+</style>
+</head>
+
+<body>
+
+<ul>
+  <li><a href="{%url 'onlineshop:aboutus'%}">Founder and Admins</a></li>
+</ul>
+<br><br>
+
+<div class="grid-containerAboutUs">
+  <div>
+	<div class="card">
+	  <img src="{% static 'images/Admin/admin1.jpg'%}" alt="Admin" style="width:90%">
+	  <div class="container">
+		<h4><b>Mohseu Minhaj Niloy</b></h4>
+		<p>AI</p>
+		<p>Software Engineeer</p>
+	  </div>
+	</div>
+  </div>
+  <div>
+	<div class="card">
+	  <img src="{% static 'images/Admin/admin2.jpg'%}" alt="Admin" style="width:90%">
+	  <div class="container">
+		<h4><b>Showvik Saha</b></h4>
+		<p>AI</p>
+		<p>Software Engineeer</p>
+	  </div>
+	</div>
+  </div>
+  <div>
+	<div class="card">
+	  <img src="{% static 'images/Admin/admin3.jpg'%}" alt="Admin" style="width:90%">
+	  <div class="container">
+		<h4><b>Kamrujjaman</b></h4>
+		<p>AI</p>
+		<p>Software Engineeer</p>
+	  </div>
+	</div>
+  </div>
+<div>
+	<div class="card">
+	  <img src="{% static 'images/Admin/admin4.jpg'%}" alt="Admin" style="width:90%">
+	  <div class="container">
+		<h4><b>Maksudul Islam Chowdhury</b></h4>
+		<p>Networking</p>
+		<p>Software Engineeer</p>
+	  </div>
+	</div>
+  </div>
+<div>
+	<div class="card">
+	  <img src="{% static 'images/Admin/admin5.jpg'%}" alt="Admin" style="width:90%">
+	  <div class="container">
+		<h4><b>Md.Mahedi Hasan</b></h4>
+		<p>Networking</p>
+		<p>Software Engineeer</p>
+	  </div>
+	</div>
+  </div>
+</div>
+</body>
+</html>
+
+{% endblock %}
